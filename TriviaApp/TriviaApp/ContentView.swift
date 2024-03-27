@@ -12,10 +12,12 @@ struct ContentView: View {
     // replace later with categories of the API
     var categories = ["1", "2", "3"]
     var difficultyOptions = ["Easy", "Medium", "Hard"]
+    var questionTypes = ["Multiple Choice", "True or False"]
     
     @State private var numQuestions : Int = 5
     @State private var selectedCategory : String = "PlaceHolder" // Change Later
     @State var difficulty : Double = 0.0
+    @State var typeOfQuestion : String = "Multiple Choice"
     
     var body: some View {
         
@@ -56,7 +58,21 @@ struct ContentView: View {
                         in: 0...2,
                         step: 1)
                 }
+            
+            // Select type of question
+            Picker("Question Type", selection: $typeOfQuestion) {
+                ForEach(questionTypes, id: \.self) {
+                    Text($0)
+                }
             }
+            
+            // Select Timer (Extra Do Later)
+        }
+        
+           
+        
+        
+            
             
             
             
