@@ -5,6 +5,7 @@
 //  Created by Topu Saha on 3/26/24.
 //
 
+
 import SwiftUI
 
 struct ContentView: View {
@@ -23,51 +24,63 @@ struct ContentView: View {
         
         
         
-        
-        Form {
-            
-            Section {
-                    Text("Trivia App")
-                        .font(.title)
-                        .foregroundColor(.black)
-                        .frame(maxWidth: .infinity)
-                }
-                .listRowBackground(Color.blue)
-            
-        
-                
-                
-                // allow user to input number of questions
-                TextField("Enter Amount of Questions", value: $numQuestions, formatter: NumberFormatter())
-                
-                
-                
-                
-                // allow user to select category
-                Picker("Select Category", selection: $selectedCategory) {
-                    ForEach(categories, id: \.self) {
-                        Text($0)
+        NavigationView {
+            ZStack {
+                VStack {
+                    Form {
+                        
+                        // allow user to input number of questions
+                        TextField("Enter Amount of Questions", value: $numQuestions, formatter: NumberFormatter())
+                        
+                        
+                        // allow user to select category
+                        Picker("Select Category", selection: $selectedCategory) {
+                            ForEach(categories, id: \.self) {
+                                Text($0)
+                            }
+                        }
+                        
+                        // Slider for level
+                        HStack {
+                            Text("Difficulty \(difficultyOptions[Int(difficulty)])")
+                            Slider(
+                                value: $difficulty,
+                                in: 0...2,
+                                step: 1)
+                        }
+                        
+                        // Select type of question
+                        Picker("Question Type", selection: $typeOfQuestion) {
+                            ForEach(questionTypes, id: \.self) {
+                                Text($0)
+                            }
+                        }
+                        
+                        // Select Timer (Extra Do Later)
                     }
+                    .navigationTitle(Text("Trivia Game"))
+                    .padding(.top, 10)
+                    
+                     
+                    
+                    Section {
+                        Button("Button") {
+                            print("Hello World")
+                        }
+                        .buttonStyle(.borderedProminent)
+                        .tint(.green)
+                        .padding()
+                    }
+                    
                 }
+                .background(Color.blue)
                 
-                // Slider for level
-                HStack {
-                    Text("Difficulty \(difficultyOptions[Int(difficulty)])")
-                    Slider(
-                        value: $difficulty,
-                        in: 0...2,
-                        step: 1)
-                }
-            
-            // Select type of question
-            Picker("Question Type", selection: $typeOfQuestion) {
-                ForEach(questionTypes, id: \.self) {
-                    Text($0)
-                }
+                
             }
             
-            // Select Timer (Extra Do Later)
+            
         }
+        
         
            
         
@@ -90,3 +103,5 @@ struct ContentView_Previews: PreviewProvider {
         ContentView()
     }
 }
+
+
