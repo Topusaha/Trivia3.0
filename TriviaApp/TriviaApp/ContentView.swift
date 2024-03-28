@@ -10,19 +10,20 @@ import SwiftUI
 
 struct ContentView: View {
     
-    // replace later with categories of the API
-    var categories = ["1", "2", "3"]
+    
     var difficultyOptions = ["Easy", "Medium", "Hard"]
     var questionTypes = ["Multiple Choice", "True or False"]
     
+    
+    @State private var categories = [String]()
+    @State private var categoriesID = [Int]()
     @State private var numQuestions : Int = 5
-    @State private var selectedCategory : String = "PlaceHolder" // Change Later
-    @State var difficulty : Double = 0.0
-    @State var typeOfQuestion : String = "Multiple Choice"
+    @State private var selectedCategory : String = ""
+    @State private var difficulty : Double = 0.0
+    @State private var typeOfQuestion : String = "Multiple Choice"
+    @State private var selectedCategoryID = 8
     
     var body: some View {
-        
-        
         
         NavigationView {
             ZStack {
@@ -43,10 +44,7 @@ struct ContentView: View {
                         // Slider for level
                         HStack {
                             Text("Difficulty \(difficultyOptions[Int(difficulty)])")
-                            Slider(
-                                value: $difficulty,
-                                in: 0...2,
-                                step: 1)
+                            Slider(value: $difficulty, in: 0...2, step: 1)
                         }
                         
                         // Select type of question
@@ -60,12 +58,18 @@ struct ContentView: View {
                     }
                     .navigationTitle(Text("Trivia Game"))
                     .padding(.top, 10)
+                    .onAppear(perform: {
+                        Task {
+                            await getCategories()
+                        }
+                    })
                     
                      
                     
                     Section {
-                        Button("Button") {
-                            print("Hello World")
+                        Button("Start") {
+                            selectedCategoryID = getCategoryID(category: selectedCategory)
+                            print(selectedCategoryID)
                         }
                         .buttonStyle(.borderedProminent)
                         .tint(.green)
@@ -74,25 +78,34 @@ struct ContentView: View {
                     
                 }
                 .background(Color.blue)
-                
-                
             }
             
             
-        }
-        
-        
-           
-        
-        
             
-            
-            
-            
-            
+            }
         }
          
-        
+    // get API categories
+    private func getCategories() async {
+        let url = URL(string: "https://opentdb.com/api_category.php")!
+        do {
+            let (data, _) = try await URLSession.shared.data(from: url)
+            
+            let response = try JSONDecoder().decode(CategoriesResponse.self, from: data)
+            
+            
+            categories = response.trivia_categories.map{$0.name}
+            categoriesID = response.trivia_categories.map{$0.id}
+        } catch {
+            print(error.localizedDescription)
+        }
+    }
+    
+    // use this method to match the category to the index and call it when the button is tapped
+    private func getCategoryID(category : String) -> Int {
+        let index = categories.firstIndex(of: category) ?? 8
+        return categoriesID[index]
+    }
         
 
 }
