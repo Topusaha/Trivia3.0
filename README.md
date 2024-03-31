@@ -36,7 +36,7 @@ https://www.loom.com/share/833b2a0d9e7f4730a0fdeecf2eb7c6ea?sid=416882f4-2def-47
 
 ## Notes
 
-Describe any challenges encountered while building the app.
+hackMD File for group project: https://hackmd.io/SVkDqZIfSVGFIYPgKStrSg
 
 ## License
 
